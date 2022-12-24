@@ -9,7 +9,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BookItem: typeof import('./src/components/BookItem.vue')['default']
     BookList: typeof import('./src/components/BookList.vue')['default']
+    CreateReviewDialog: typeof import('./src/components/CreateReviewDialog.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElRate: typeof import('element-plus/es')['ElRate']
     Header: typeof import('./src/components/Header.vue')['default']

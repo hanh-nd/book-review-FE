@@ -1,8 +1,4 @@
-import type {
-    ICreateReviewBody,
-    IGetReviewListQuery,
-    IReview,
-} from '@/interfaces';
+import type { IGetReviewListQuery, IReview } from '@/interfaces';
 import { reviewService } from '@/services/review.api';
 
 export interface IReviewState {
@@ -29,18 +25,6 @@ const getters = {
 };
 
 const actions = {
-    async createReview(
-        { commit, state }: { commit: any; state: IReviewState },
-        body: ICreateReviewBody
-    ) {
-        const response = await reviewService.createReview(body);
-        if (response?.success) {
-            commit('SET_SELECTED_REVIEW', response?.data || {});
-        } else {
-            commit('SET_SELECTED_REVIEW', {});
-        }
-    },
-
     async getReviewList({
         commit,
         state,
@@ -78,6 +62,13 @@ const actions = {
     ) {
         const response = await reviewService.reactToReview(id);
     },
+
+    async setReviewListQuery(
+        { commit, state }: { commit: any; state: IReviewState },
+        query: IGetReviewListQuery
+    ) {
+        commit('SET_REVIEW_LIST_QUERY', query);
+    },
 };
 
 const mutations = {
@@ -86,6 +77,9 @@ const mutations = {
     },
     SET_REVIEW_LIST_COUNT(state: IReviewState, reviewListCount: number) {
         state.reviewListCount = reviewListCount;
+    },
+    SET_REVIEW_LIST_QUERY(state: IReviewState, query: IGetReviewListQuery) {
+        state.reviewListQuery = query;
     },
     SET_SELECTED_REVIEW(state: IReviewState, review: IReview) {
         state.selectedReview = review;

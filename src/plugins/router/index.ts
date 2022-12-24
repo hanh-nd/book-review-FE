@@ -37,12 +37,17 @@ const router = createRouter({
             component: () =>
                 import('@/pages/book-manage/pages/CreateBookPage.vue'),
         },
-
         {
             path: '/books/:id/update',
             name: PageName.UPDATE_BOOK_PAGE,
             component: () =>
                 import('@/pages/book-manage/pages/UpdateBookPage.vue'),
+        },
+        {
+            path: '/books/:id/review',
+            name: PageName.REVIEW_LIST_PAGE,
+            component: () =>
+                import('@/pages/review-list/pages/ReviewListPage.vue'),
         },
     ],
 });

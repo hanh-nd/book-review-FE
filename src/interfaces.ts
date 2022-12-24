@@ -49,6 +49,7 @@ export interface IUser {
     _id: string;
     username: string;
     bookShelf: IBook[];
+    bookShelfIds: string[];
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
@@ -57,8 +58,8 @@ export interface IUser {
 export interface IReview {
     _id: string;
     content: string;
-    author: IUser;
-    book: IBook;
+    author: IUser[];
+    book: IBook[];
     likes: IUser[];
     createdAt: Date;
     updatedAt: Date;

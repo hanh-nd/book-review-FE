@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="bottom-section">
-            <div class="title">{{ book.name }}</div>
+            <div class="title">{{ book?.name }}</div>
             <div class="meta-data">
                 {{ book?.author }} - {{ book?.publisher }}
                 {{ book?.publicationYear }}

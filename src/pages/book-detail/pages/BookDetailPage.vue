@@ -18,19 +18,28 @@
             </div>
         </div>
         <div class="book-action">
-            <ElButton @click="navigateToUpdateBookPage" v-if="true"
+            <ElButton @click="addToBookShelf" v-if="!isBookInBookShelf"
                 >Thêm vào tủ sách</ElButton
             >
+            <ElButton @click="removeToBookShelf" v-if="isBookInBookShelf"
+                >Xóa khỏi tủ sách</ElButton
+            >
+
             <ElButton @click="navigateToUpdateBookPage">Cập nhật</ElButton>
             <ElButton @click="navigateToUpdateBookPage">Viết review</ElButton>
-            <ElButton @click="navigateToUpdateBookPage">Xem review</ElButton>
+            <ElButton @click="navigateToReviewListPage">Xem review</ElButton>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import {
+    showErrorNotificationFunction,
+    showSuccessNotificationFunction,
+} from '@/common/helpers';
 import { PageName } from '@/constants';
-import type { IStore } from '@/interfaces';
+import type { IBook, IStore } from '@/interfaces';
+import { userService } from '@/services/user.api';
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -39,8 +48,7 @@ const route = useRoute();
 const router = useRouter();
 const store = useStore<IStore>();
 
-const bookDetail = computed(() => store.state.books.selectedBook);
-const loginUser = computed(() => store.state.auth.loginUser);
+const bookDetail = computed<IBook>(() => store.state.books.selectedBook!);
 
 const navigateToUpdateBookPage = () => {
     router.push({
@@ -51,12 +59,46 @@ const navigateToUpdateBookPage = () => {
     });
 };
 
-// const isBookInBookShelf = computed(() => {
-//     return !!loginUser.value?.bookShelf.find(
-//         (book) => book._id === bookDetail.value?._id
-//     );
-// });
+const navigateToReviewListPage = () => {
+    router.push({
+        name: PageName.REVIEW_LIST_PAGE,
+        params: {
+            id: bookDetail.value?._id,
+        },
+    });
+};
 
+const addToBookShelf = async () => {
+    const response = await userService.addToBookShelf({
+        bookId: bookDetail.value._id,
+    });
+    if (response?.success) {
+        showSuccessNotificationFunction('Added to book shelf');
+        store.dispatch('auth/setLoginUser', response.data);
+    } else {
+        showErrorNotificationFunction('An error occurred');
+    }
+};
+
+const removeToBookShelf = async () => {
+    const response = await userService.addToBookShelf({
+        bookId: bookDetail.value._id,
+    });
+    if (response?.success) {
+        showSuccessNotificationFunction('Removed to book shelf');
+        console.log('ec', response.data);
+
+        store.dispatch('auth/setLoginUser', response.data);
+    } else {
+        showErrorNotificationFunction('An error occurred');
+    }
+};
+
+const isBookInBookShelf = computed(() => {
+    return store.state.auth.loginUser?.bookShelfIds?.some(
+        (id) => id === bookDetail.value?._id
+    );
+});
 watch(
     () => route.params.id,
     async (newId) => {
