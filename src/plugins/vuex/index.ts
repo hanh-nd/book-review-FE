@@ -1,6 +1,7 @@
 import { createLogger, createStore } from 'vuex';
 import auth from './modules/auth';
 import books from './modules/books';
+import comments from './modules/comments';
 import dialogs from './modules/dialogs';
 import reviews from './modules/reviews';
 import users from './modules/users';
@@ -14,6 +15,7 @@ export default createStore({
         users,
         reviews,
         dialogs,
+        comments,
     },
     strict: debug,
     plugins: debug ? [createLogger()] : [],

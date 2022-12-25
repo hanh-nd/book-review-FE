@@ -23,16 +23,13 @@
             </div>
         </div>
 
+        Bình luận: Tổng số {{ commentListCount }} bình luân
+
         <div class="create-comment">
-            Bình luận
-            <ElInput
-                placeholder="Enter your comment"
-                :rows="2"
-                type="textarea"
-            />
+            <CreateCommentBox :review-id="reviewId" />
         </div>
         <div class="comment-list">
-            <CommentList :comment-list="[]" />
+            <CommentList :comment-list="commentList" />
         </div>
     </div>
 </template>
@@ -44,15 +41,25 @@ import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import CommentList from '../components/CommentList.vue';
+import CreateCommentBox from '../components/CreateCommentBox.vue';
 const route = useRoute();
 const store = useStore<IStore>();
 
+const reviewId = computed(() => route.params.id as string);
 const reviewDetail = computed(() => store.state.reviews.selectedReview);
+const commentList = computed(() => store.state.comments.commentList);
+const commentListCount = computed(() => store.state.comments.commentListCount);
 
 watch(
     () => route.params.id,
-    (id) => {
+    async (id) => {
         store.dispatch('reviews/getReviewDetail', id);
+        await store.dispatch('comments/setCommentListQuery', {
+            page: 1,
+            limit: 10,
+            reviewId: id,
+        });
+        store.dispatch('comments/getCommentList');
     },
     {
         immediate: true,

@@ -1,4 +1,5 @@
 import { ElNotification } from 'element-plus';
+import localStorageAuthService from './auth-storage';
 
 export function isJson(str: string): boolean {
     try {
@@ -29,4 +30,10 @@ export function showErrorNotificationFunction(
         title: title || 'Thất bại',
         message: message,
     });
+}
+
+export function isUserLiked(likeIds: string[]) {
+    const userId = localStorageAuthService.getLoginUser()?._id;
+    if (!userId) return false;
+    return likeIds.includes(userId);
 }

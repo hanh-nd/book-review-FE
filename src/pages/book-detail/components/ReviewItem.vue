@@ -19,19 +19,30 @@
         <div class="review-section">
             {{ review?.content }}
         </div>
+        <div class="react-section">
+            {{ numberOfLikes }} lượt thích
+            <ElButton @click="reactToReview(review?._id)">{{
+                isLike ? 'Bỏ thích' : 'Thích'
+            }}</ElButton>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { isUserLiked } from '@/common/helpers';
 import { PageName } from '@/constants';
-import type { IReview } from '@/interfaces';
+import type { IReview, IStore } from '@/interfaces';
 import dayjs from '@/plugins/dayjs';
+import { reviewService } from '@/services/review.api';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-defineProps<{
+import { useStore } from 'vuex';
+const props = defineProps<{
     review: IReview;
 }>();
 
 const router = useRouter();
+const store = useStore<IStore>();
 
 const viewAuthorProfile = (id: string) => {
     router.push({
@@ -50,6 +61,14 @@ const navigateToDetailPage = (id: string) => {
         },
     });
 };
+
+const reactToReview = async (id: string) => {
+    await reviewService.reactToReview(id);
+    store.dispatch('reviews/getReviewList');
+};
+
+const isLike = computed(() => isUserLiked(props.review.likeIds));
+const numberOfLikes = computed(() => props.review.likeIds.length);
 </script>
 
 <style lang="scss" scoped>

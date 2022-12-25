@@ -93,8 +93,6 @@ const removeToBookShelf = async () => {
     });
     if (response?.success) {
         showSuccessNotificationFunction('Removed to book shelf');
-        console.log('ec', response.data);
-
         store.dispatch('auth/setLoginUser', response.data);
     } else {
         showErrorNotificationFunction('An error occurred');

@@ -27,7 +27,7 @@ class ReviewService extends ApiService {
     }
 
     reactToReview(reviewId: string): Promise<IBodyResponse<IReview>> {
-        return this.client.get(`${this.baseUrl}/reviews/${reviewId}/react`);
+        return this.client.patch(`${this.baseUrl}/reviews/${reviewId}/react`);
     }
 
     updateReview(
