@@ -15,6 +15,8 @@
                 <div class="content">
                     Năm xuất bản: {{ bookDetail?.publicationYear }}
                 </div>
+                <div class="content">Nội dung:</div>
+                {{ bookDetail?.describe }}
             </div>
         </div>
         <div class="book-action">
@@ -26,8 +28,16 @@
             >
 
             <ElButton @click="navigateToUpdateBookPage">Cập nhật</ElButton>
-            <ElButton @click="navigateToUpdateBookPage">Viết review</ElButton>
-            <ElButton @click="navigateToReviewListPage">Xem review</ElButton>
+        </div>
+        <div class="book-review">
+            Review: Tổng số {{ reviewListCount }} review(s)
+
+            <div class="create-review">
+                <CreateReviewBox :book-id="bookId" />
+            </div>
+            <div class="review-list">
+                <ReviewList :review-list="reviewList" />
+            </div>
         </div>
     </div>
 </template>
@@ -39,6 +49,9 @@ import {
 } from '@/common/helpers';
 import { PageName } from '@/constants';
 import type { IBook, IStore } from '@/interfaces';
+import CreateReviewBox from '../components/CreateReviewBox.vue';
+import ReviewList from '../components/ReviewList.vue';
+
 import { userService } from '@/services/user.api';
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -48,20 +61,14 @@ const route = useRoute();
 const router = useRouter();
 const store = useStore<IStore>();
 
+const bookId = computed(() => route.params.id as string);
 const bookDetail = computed<IBook>(() => store.state.books.selectedBook!);
+const reviewList = computed(() => store.state.reviews.reviewList);
+const reviewListCount = computed(() => store.state.reviews.reviewListCount);
 
 const navigateToUpdateBookPage = () => {
     router.push({
         name: PageName.UPDATE_BOOK_PAGE,
-        params: {
-            id: bookDetail.value?._id,
-        },
-    });
-};
-
-const navigateToReviewListPage = () => {
-    router.push({
-        name: PageName.REVIEW_LIST_PAGE,
         params: {
             id: bookDetail.value?._id,
         },
@@ -99,10 +106,17 @@ const isBookInBookShelf = computed(() => {
         (id) => id === bookDetail.value?._id
     );
 });
+
 watch(
     () => route.params.id,
     async (newId) => {
         store.dispatch('books/getBookDetail', newId);
+        await store.dispatch('reviews/setReviewListQuery', {
+            page: 1,
+            limit: 10,
+            bookId: newId,
+        });
+        store.dispatch('reviews/getReviewList');
     },
     {
         immediate: true,
@@ -121,6 +135,9 @@ watch(
         gap: 24px;
 
         .left-section {
+            min-width: 350px;
+            max-width: 350px;
+
             .book-cover {
                 img {
                     width: 100%;

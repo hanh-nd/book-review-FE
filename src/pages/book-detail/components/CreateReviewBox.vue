@@ -1,9 +1,16 @@
 <template>
-    <ElDialog :model-value="isVisible" @close="onCloseDialog">
-        <ElInput name="content" v-model="content" placeholder="Enter review" />
+    <div class="create-review-box">
+        Viết review:
+        <ElInput
+            name="content"
+            v-model="content"
+            placeholder="Enter review"
+            :rows="3"
+            type="textarea"
+        />
         <ElInput name="bookId" v-model="bookId" hidden />
         <ElButton @click="onSubmit">Submit</ElButton>
-    </ElDialog>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -15,11 +22,8 @@ import type { IStore } from '@/interfaces';
 import { reviewService } from '@/services/review.api';
 import { useField, useForm } from 'vee-validate';
 import { useStore } from 'vuex';
-const emit = defineEmits<{
-    (e: 'on-close'): void;
-}>();
+
 const props = defineProps<{
-    isVisible: boolean;
     bookId: string;
 }>();
 
@@ -48,7 +52,6 @@ const onSubmit = handleSubmit(async (values) => {
         showSuccessNotificationFunction('Review created');
         clearFormData();
         store.dispatch('reviews/getReviewList');
-        onCloseDialog();
     } else {
         showErrorNotificationFunction('An error occurred ');
     }
@@ -56,10 +59,6 @@ const onSubmit = handleSubmit(async (values) => {
 
 const { value: content } = useField<string>('content');
 const { value: bookId } = useField<string>('bookId');
-
-const onCloseDialog = () => {
-    emit('on-close');
-};
 </script>
 
 <style lang="scss" scoped></style>

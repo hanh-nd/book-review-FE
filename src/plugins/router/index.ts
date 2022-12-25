@@ -44,10 +44,10 @@ const router = createRouter({
                 import('@/pages/book-manage/pages/UpdateBookPage.vue'),
         },
         {
-            path: '/books/:id/review',
-            name: PageName.REVIEW_LIST_PAGE,
+            path: '/reviews/:id',
+            name: PageName.REVIEW_DETAIL_PAGE,
             component: () =>
-                import('@/pages/review-list/pages/ReviewListPage.vue'),
+                import('@/pages/review-detail/pages/ReviewDetailPage.vue'),
         },
     ],
 });

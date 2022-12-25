@@ -1,32 +1,52 @@
 <template>
-    <div class="auth-wrapper">
-        <ElInput name="name" v-model="name" placeholder="Enter book name" />
-        <ElInput
-            name="imageUrl"
-            v-model="imageUrl"
-            placeholder="Enter book cover url"
-        />
-        <ElInput
-            name="describe"
-            v-model="describe"
-            placeholder="Enter book description"
-        />
-        <ElInput
-            name="author"
-            v-model="author"
-            placeholder="Enter book author"
-        />
-        <ElInput
-            name="publisher"
-            v-model="publisher"
-            placeholder="Enter book publisher"
-        />
-        <ElInput
-            name="publicationYear"
-            v-model="publicationYear"
-            placeholder="Enter book publication year"
-        />
-        <ElButton @click="onSubmit">Update</ElButton>
+    <div class="update-book-page-wrapper">
+        <div class="form-item">
+            Tên sách:
+            <ElInput name="name" v-model="name" placeholder="Enter book name" />
+        </div>
+        <div class="form-item">
+            Ảnh bìa:
+            <ElInput
+                name="imageUrl"
+                v-model="imageUrl"
+                placeholder="Enter book cover url"
+            />
+        </div>
+        <div class="form-item">
+            Tác giả:
+            <ElInput
+                name="author"
+                v-model="author"
+                placeholder="Enter book author"
+            />
+        </div>
+        <div class="form-item">
+            Nhà xuất bản:
+            <ElInput
+                name="publisher"
+                v-model="publisher"
+                placeholder="Enter book publisher"
+            />
+        </div>
+        <div class="form-item">
+            Năm xuất bản:
+            <ElInput
+                name="publicationYear"
+                v-model="publicationYear"
+                placeholder="Enter book publication year"
+            />
+        </div>
+        <div class="form-item">
+            Nội dung:
+            <ElInput
+                name="describe"
+                v-model="describe"
+                :rows="3"
+                type="textarea"
+                placeholder="Enter book description"
+            />
+        </div>
+        <ElButton @click="onSubmit" type="primary">Update</ElButton>
     </div>
 </template>
 
@@ -114,4 +134,10 @@ watch(
 );
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.update-book-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+</style>

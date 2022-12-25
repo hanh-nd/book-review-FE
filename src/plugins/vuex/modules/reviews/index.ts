@@ -5,7 +5,7 @@ export interface IReviewState {
     reviewList: IReview[];
     reviewListCount: number;
     reviewListQuery: IGetReviewListQuery;
-    selectedReview: IReview | {};
+    selectedReview: IReview | null;
 }
 const state = (): IReviewState => ({
     reviewList: [],
@@ -14,7 +14,7 @@ const state = (): IReviewState => ({
         page: 1,
         limit: 10,
     },
-    selectedReview: {},
+    selectedReview: null,
 });
 
 const getters = {
@@ -50,9 +50,9 @@ const actions = {
     ) {
         const response = await reviewService.getReviewDetail(id);
         if (response?.success) {
-            commit('SET_SELECTED_REVIEW', response?.data || {});
+            commit('SET_SELECTED_REVIEW', response?.data || null);
         } else {
-            commit('SET_SELECTED_REVIEW', {});
+            commit('SET_SELECTED_REVIEW', null);
         }
     },
 

@@ -1,9 +1,10 @@
-import type { IUserState } from './plugins/vuex/modules/users';
-import type { IReviewState } from './plugins/vuex/modules/reviews';
-import type { IBookState } from './plugins/vuex/modules/books';
-import type { IAuthState } from './plugins/vuex/modules/auth';
 import type { AxiosResponse } from 'axios';
 import type { HttpStatus } from './constants';
+import type { IAuthState } from './plugins/vuex/modules/auth';
+import type { IBookState } from './plugins/vuex/modules/books';
+import type { IDialogState } from './plugins/vuex/modules/dialogs';
+import type { IReviewState } from './plugins/vuex/modules/reviews';
+import type { IUserState } from './plugins/vuex/modules/users';
 
 export interface IBodyResponse<T> extends AxiosResponse {
     success: boolean;
@@ -30,6 +31,7 @@ export interface IStore {
     books: IBookState;
     reviews: IReviewState;
     users: IUserState;
+    dialogs: IDialogState;
 }
 
 export interface IBook {
