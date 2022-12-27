@@ -45,6 +45,7 @@
 <script setup lang="ts">
 import {
     showErrorNotificationFunction,
+    showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
 import { PageName } from '@/constants';
@@ -67,6 +68,8 @@ const reviewList = computed(() => store.state.reviews.reviewList);
 const reviewListCount = computed(() => store.state.reviews.reviewListCount);
 
 const navigateToUpdateBookPage = () => {
+    if (!showRequireLoginFunction()) return;
+
     router.push({
         name: PageName.UPDATE_BOOK_PAGE,
         params: {
@@ -76,6 +79,8 @@ const navigateToUpdateBookPage = () => {
 };
 
 const addToBookShelf = async () => {
+    if (!showRequireLoginFunction()) return;
+
     const response = await userService.addToBookShelf({
         bookId: bookDetail.value._id,
     });
@@ -88,6 +93,8 @@ const addToBookShelf = async () => {
 };
 
 const removeToBookShelf = async () => {
+    if (!showRequireLoginFunction()) return;
+
     const response = await userService.addToBookShelf({
         bookId: bookDetail.value._id,
     });

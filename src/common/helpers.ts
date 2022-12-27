@@ -32,13 +32,23 @@ export function showErrorNotificationFunction(
     });
 }
 
+export function showRequireLoginFunction(): boolean {
+    const userId = localStorageAuthService.getLoginUser()?._id;
+    if (userId) return true;
+
+    showErrorNotificationFunction(
+        'Bạn phải đăng nhập để thực hiện chức năng này'
+    );
+    return false;
+}
+
 export function isUserLiked(likeIds: string[]) {
     const userId = localStorageAuthService.getLoginUser()?._id;
     if (!userId) return false;
     return likeIds.includes(userId);
 }
 
-export function isShowModifyButton(authorId: string) {
+export function isAuthor(authorId: string) {
     const userId = localStorageAuthService.getLoginUser()?._id;
     if (!userId) return false;
     return authorId === userId;

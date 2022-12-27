@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import {
     showErrorNotificationFunction,
+    showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
 import type { IStore } from '@/interfaces';
@@ -41,6 +42,8 @@ const { handleSubmit } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values) => {
+    if (!showRequireLoginFunction()) return;
+
     const response = await commentService.updateComment(
         props.commentId,
         values

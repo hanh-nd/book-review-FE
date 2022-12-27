@@ -16,7 +16,7 @@
                 >
             </div>
 
-            <div class="manage-button-groups">
+            <div class="manage-button-groups" v-if="isReviewAuthor">
                 <ElButton @click="updateReview">Chỉnh sửa</ElButton>
                 <ElButton @click="deleteReview(review?._id)">Xóa</ElButton>
             </div>
@@ -44,8 +44,10 @@
 
 <script setup lang="ts">
 import {
+    isAuthor,
     isUserLiked,
     showErrorNotificationFunction,
+    showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
 import { PageName } from '@/constants';
@@ -64,6 +66,10 @@ const router = useRouter();
 const store = useStore<IStore>();
 
 const isShowUpdateInput = ref(false);
+
+const isLike = computed(() => isUserLiked(props.review.likeIds));
+const numberOfLikes = computed(() => props.review.likeIds.length);
+const isReviewAuthor = computed(() => isAuthor(props.review.author?.[0]._id));
 
 const viewAuthorProfile = (id: string) => {
     router.push({
@@ -84,6 +90,8 @@ const navigateToDetailPage = (id: string) => {
 };
 
 const reactToReview = async (id: string) => {
+    if (!showRequireLoginFunction()) return;
+
     await reviewService.reactToReview(id);
     store.dispatch('reviews/getReviewList');
 };
@@ -97,6 +105,8 @@ const onUpdatedReview = () => {
 };
 
 const deleteReview = async (id: string) => {
+    if (!showRequireLoginFunction()) return;
+
     const response = await reviewService.deleteReview(id);
     if (response?.success) {
         showSuccessNotificationFunction('Xóa đánh giá thành công');
@@ -105,9 +115,6 @@ const deleteReview = async (id: string) => {
         showErrorNotificationFunction('Xóa đánh giá thất bại');
     }
 };
-
-const isLike = computed(() => isUserLiked(props.review.likeIds));
-const numberOfLikes = computed(() => props.review.likeIds.length);
 </script>
 
 <style lang="scss" scoped>

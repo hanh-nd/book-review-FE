@@ -10,7 +10,7 @@
                 bình luận lúc: {{ dayjs(comment?.createdAt).fmHHmmDDMMYYYY() }}
             </div>
 
-            <div class="manage-button-groups">
+            <div class="manage-button-groups" v-if="isCommentAuthor">
                 <ElButton @click="updateComment">Chỉnh sửa</ElButton>
                 <ElButton @click="deleteComment(comment?._id)">Xóa</ElButton>
             </div>
@@ -45,8 +45,10 @@
 
 <script setup lang="ts">
 import {
+    isAuthor,
     isUserLiked,
     showErrorNotificationFunction,
+    showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
 import { PageName } from '@/constants';
@@ -70,6 +72,7 @@ const isShowUpdateInput = ref(false);
 
 const isLike = computed(() => isUserLiked(props.comment.likeIds || []));
 const numberOfLikes = computed(() => props.comment.likeIds?.length);
+const isCommentAuthor = computed(() => isAuthor(props.comment.author?.[0]._id));
 
 const viewAuthorProfile = (id: string) => {
     router.push({
@@ -85,6 +88,8 @@ const showReplyBox = () => {
 };
 
 const reactToReview = async (id: string) => {
+    if (!showRequireLoginFunction()) return;
+
     await commentService.reactToComment(id);
     store.dispatch('comments/getCommentList');
 };
@@ -98,6 +103,8 @@ const onUpdatedReview = () => {
 };
 
 const deleteComment = async (id: string) => {
+    if (!showRequireLoginFunction()) return;
+
     const response = await commentService.deleteComment(id);
     if (response?.success) {
         showSuccessNotificationFunction('Xóa bình luận thành công');
