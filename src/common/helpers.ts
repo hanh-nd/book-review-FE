@@ -37,3 +37,9 @@ export function isUserLiked(likeIds: string[]) {
     if (!userId) return false;
     return likeIds.includes(userId);
 }
+
+export function isShowModifyButton(authorId: string) {
+    const userId = localStorageAuthService.getLoginUser()?._id;
+    if (!userId) return false;
+    return authorId === userId;
+}

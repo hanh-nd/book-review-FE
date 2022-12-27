@@ -4,6 +4,7 @@ import type {
     ICreateCommentBody,
     IGetCommentListQuery,
     IComment,
+    ICommentListTree,
     IUpdateCommentBody,
 } from '@/interfaces';
 import axiosInstance from '@/plugins/axios';
@@ -16,7 +17,7 @@ class CommentService extends ApiService {
 
     getCommentList(
         params: IGetCommentListQuery
-    ): Promise<IBodyResponse<ICommonGetListResponse<IComment>>> {
+    ): Promise<IBodyResponse<ICommonGetListResponse<ICommentListTree>>> {
         return this.client.get(`${this.baseUrl}/comments`, {
             params,
         });

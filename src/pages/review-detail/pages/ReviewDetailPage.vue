@@ -29,7 +29,7 @@
             <CreateCommentBox :review-id="reviewId" />
         </div>
         <div class="comment-list">
-            <CommentList :comment-list="commentList" />
+            <CommentList :comment-list-tree="commentList" />
         </div>
     </div>
 </template>

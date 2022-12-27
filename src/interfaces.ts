@@ -75,7 +75,9 @@ export interface IComment {
     _id: string;
     content: string;
     author: IUser[];
+    authorId: string;
     review: IReview[];
+    reviewId: string;
     likeIds: string[];
     createdAt: Date;
     updatedAt: Date;
@@ -143,4 +145,8 @@ export interface ICreateCommentBody {
 
 export interface IUpdateCommentBody {
     content: string;
+}
+
+export interface ICommentListTree extends IComment {
+    children: ICommentListTree[];
 }

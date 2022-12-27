@@ -1,8 +1,12 @@
-import type { IGetCommentListQuery, IComment } from '@/interfaces';
+import type {
+    IComment,
+    IGetCommentListQuery,
+    ICommentListTree,
+} from '@/interfaces';
 import { commentService } from '@/services/comment.api';
 
 export interface ICommentState {
-    commentList: IComment[];
+    commentList: ICommentListTree[];
     commentListCount: number;
     commentListQuery: IGetCommentListQuery;
     selectedComment: IComment | null;
@@ -60,7 +64,7 @@ const actions = {
 };
 
 const mutations = {
-    SET_COMMENT_LIST(state: ICommentState, commentList: IComment[]) {
+    SET_COMMENT_LIST(state: ICommentState, commentList: ICommentListTree[]) {
         state.commentList = commentList;
     },
     SET_COMMENT_LIST_COUNT(state: ICommentState, commentListCount: number) {
