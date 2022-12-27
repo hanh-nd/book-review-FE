@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        Bình luận: Tổng số {{ commentListCount }} bình luân
+        <!-- Bình luận: Tổng số {{ commentListCount }} bình luân -->
 
         <div class="create-comment">
             <CreateCommentBox :review-id="reviewId" />
@@ -58,6 +58,8 @@ watch(
             page: 1,
             limit: 10,
             reviewId: id,
+            orderBy: 'createdAt',
+            orderDirection: 'DESC',
         });
         store.dispatch('comments/getCommentList');
     },

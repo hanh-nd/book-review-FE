@@ -7,7 +7,7 @@
                     class="author-name"
                     >{{ review?.author[0]?.username }}</span
                 >
-                đánh giá lúc: {{ dayjs(review?.updatedAt).fmHHmmDDMMYYYY() }}
+                đánh giá lúc: {{ dayjs(review?.createdAt).fmHHmmDDMMYYYY() }}
             </div>
 
             <div class="see-detail">
@@ -15,9 +15,23 @@
                     >Xem review</ElButton
                 >
             </div>
+
+            <div class="manage-button-groups">
+                <ElButton @click="updateReview">Chỉnh sửa</ElButton>
+                <ElButton @click="deleteReview(review?._id)">Xóa</ElButton>
+            </div>
         </div>
         <div class="review-section">
-            {{ review?.content }}
+            <div class="update" v-if="isShowUpdateInput">
+                <UpdateReviewBox
+                    :content="review?.content"
+                    :review-id="review?._id"
+                    @on-updated="onUpdatedReview"
+                />
+            </div>
+            <div class="content" style="white-space: pre" v-else>
+                {{ review?.content }}
+            </div>
         </div>
         <div class="react-section">
             {{ numberOfLikes }} lượt thích
@@ -29,20 +43,27 @@
 </template>
 
 <script setup lang="ts">
-import { isUserLiked } from '@/common/helpers';
+import {
+    isUserLiked,
+    showErrorNotificationFunction,
+    showSuccessNotificationFunction,
+} from '@/common/helpers';
 import { PageName } from '@/constants';
 import type { IReview, IStore } from '@/interfaces';
 import dayjs from '@/plugins/dayjs';
 import { reviewService } from '@/services/review.api';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import UpdateReviewBox from './UpdateReviewBox.vue';
 const props = defineProps<{
     review: IReview;
 }>();
 
 const router = useRouter();
 const store = useStore<IStore>();
+
+const isShowUpdateInput = ref(false);
 
 const viewAuthorProfile = (id: string) => {
     router.push({
@@ -65,6 +86,24 @@ const navigateToDetailPage = (id: string) => {
 const reactToReview = async (id: string) => {
     await reviewService.reactToReview(id);
     store.dispatch('reviews/getReviewList');
+};
+
+const updateReview = () => {
+    isShowUpdateInput.value = !isShowUpdateInput.value;
+};
+
+const onUpdatedReview = () => {
+    isShowUpdateInput.value = false;
+};
+
+const deleteReview = async (id: string) => {
+    const response = await reviewService.deleteReview(id);
+    if (response?.success) {
+        showSuccessNotificationFunction('Xóa đánh giá thành công');
+        store.dispatch('reviews/getReviewList');
+    } else {
+        showErrorNotificationFunction('Xóa đánh giá thất bại');
+    }
 };
 
 const isLike = computed(() => isUserLiked(props.review.likeIds));

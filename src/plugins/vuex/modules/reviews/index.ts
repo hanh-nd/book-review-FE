@@ -56,13 +56,6 @@ const actions = {
         }
     },
 
-    async reactToReview(
-        { commit, state }: { commit: any; state: IReviewState },
-        id: string
-    ) {
-        const response = await reviewService.reactToReview(id);
-    },
-
     async setReviewListQuery(
         { commit, state }: { commit: any; state: IReviewState },
         query: IGetReviewListQuery

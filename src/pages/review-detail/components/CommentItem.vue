@@ -7,11 +7,25 @@
                     class="author-name"
                     >{{ comment?.author?.[0]?.username }}</span
                 >
-                bình luận lúc: {{ dayjs(comment?.updatedAt).fmHHmmDDMMYYYY() }}
+                bình luận lúc: {{ dayjs(comment?.createdAt).fmHHmmDDMMYYYY() }}
+            </div>
+
+            <div class="manage-button-groups">
+                <ElButton @click="updateComment">Chỉnh sửa</ElButton>
+                <ElButton @click="deleteComment(comment?._id)">Xóa</ElButton>
             </div>
         </div>
         <div class="comment-section">
-            {{ comment.content }}
+            <div class="update" v-if="isShowUpdateInput">
+                <UpdateCommentBox
+                    :content="comment?.content"
+                    :comment-id="comment?._id"
+                    @on-updated="onUpdatedReview"
+                />
+            </div>
+            <div class="content" style="white-space: pre" v-else>
+                {{ comment?.content }}
+            </div>
         </div>
 
         <div class="react-section">
@@ -30,7 +44,11 @@
 </template>
 
 <script setup lang="ts">
-import { isUserLiked } from '@/common/helpers';
+import {
+    isUserLiked,
+    showErrorNotificationFunction,
+    showSuccessNotificationFunction,
+} from '@/common/helpers';
 import { PageName } from '@/constants';
 import type { IComment, IStore } from '@/interfaces';
 import dayjs from '@/plugins/dayjs';
@@ -39,6 +57,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import CreateReplyBox from './CreateReplyBox.vue';
+import UpdateCommentBox from './UpdateCommentBox.vue';
 const props = defineProps<{
     comment: IComment;
 }>();
@@ -47,6 +66,10 @@ const router = useRouter();
 const store = useStore<IStore>();
 
 const isShowReplyBox = ref(false);
+const isShowUpdateInput = ref(false);
+
+const isLike = computed(() => isUserLiked(props.comment.likeIds || []));
+const numberOfLikes = computed(() => props.comment.likeIds?.length);
 
 const viewAuthorProfile = (id: string) => {
     router.push({
@@ -66,8 +89,23 @@ const reactToReview = async (id: string) => {
     store.dispatch('comments/getCommentList');
 };
 
-const isLike = computed(() => isUserLiked(props.comment.likeIds || []));
-const numberOfLikes = computed(() => props.comment.likeIds?.length);
+const updateComment = () => {
+    isShowUpdateInput.value = !isShowUpdateInput.value;
+};
+
+const onUpdatedReview = () => {
+    isShowUpdateInput.value = false;
+};
+
+const deleteComment = async (id: string) => {
+    const response = await commentService.deleteComment(id);
+    if (response?.success) {
+        showSuccessNotificationFunction('Xóa bình luận thành công');
+        store.dispatch('comments/getCommentList');
+    } else {
+        showErrorNotificationFunction('Xóa bình luận thất bại');
+    }
+};
 </script>
 
 <style lang="scss" scoped>
