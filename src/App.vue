@@ -1,6 +1,8 @@
 <template>
-    <Header />
-    <RouterView />
+    <div class="app">
+        <Header />
+        <RouterView />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -15,4 +17,8 @@ const loginUser = localStorageAuthService.getLoginUser();
 store.dispatch('auth/setLoginUser', loginUser);
 </script>
 
-<style scoped></style>
+<style scoped>
+.app {
+    background-color: white;
+}
+</style>
