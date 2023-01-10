@@ -12,12 +12,14 @@
                 </div>
             </template>
         </ElTree>
+        <ReportCommentDialog />
     </div>
 </template>
 <script setup lang="ts">
 import type { ICommentListTree } from '@/interfaces';
 import { ElTree } from 'element-plus';
 import CommentItem from './CommentItem.vue';
+import ReportCommentDialog from './ReportCommentDialog.vue';
 
 defineProps<{
     commentListTree: ICommentListTree[];

@@ -12,12 +12,14 @@ export function isJson(str: string): boolean {
 
 export function showSuccessNotificationFunction(
     message: string,
-    title?: string
+    title?: string,
+    onClick?: () => void
 ): void {
     ElNotification({
         type: 'success',
         title: title || 'Thành công',
         message: message,
+        onClick: onClick,
     });
 }
 

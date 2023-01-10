@@ -50,9 +50,10 @@ import {
     showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
-import { PageName } from '@/constants';
+import { NotificationModule, PageName } from '@/constants';
 import type { IReview, IStore } from '@/interfaces';
 import dayjs from '@/plugins/dayjs';
+import { SocketIO } from '@/plugins/socket.io';
 import { reviewService } from '@/services/review.api';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -94,6 +95,8 @@ const reactToReview = async (id: string) => {
 
     await reviewService.reactToReview(id);
     store.dispatch('reviews/getReviewList');
+
+    SocketIO.emitUserLike(props.review.author[0]._id, props.review._id, NotificationModule.REVIEW)
 };
 
 const updateReview = () => {

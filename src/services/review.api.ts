@@ -3,6 +3,7 @@ import type {
     ICommonGetListResponse,
     ICreateReviewBody,
     IGetReviewListQuery,
+    IReportReviewBody,
     IReview,
     IUpdateReviewBody,
 } from '@/interfaces';
@@ -39,6 +40,16 @@ class ReviewService extends ApiService {
 
     deleteReview(reviewId: string): Promise<IBodyResponse<any>> {
         return this.client.delete(`${this.baseUrl}/reviews/${reviewId}`);
+    }
+
+    reportReview(
+        reviewId: string,
+        body: IReportReviewBody
+    ): Promise<IBodyResponse<any>> {
+        return this.client.post(
+            `${this.baseUrl}/reviews/${reviewId}/report`,
+            body
+        );
     }
 }
 

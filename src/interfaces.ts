@@ -126,6 +126,11 @@ export interface IUpdateReviewBody {
     content: string;
 }
 
+export interface IReportReviewBody {
+    description: string;
+}
+
+
 export interface IUpdateUserBody {
     password: string;
 }

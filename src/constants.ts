@@ -27,3 +27,20 @@ export enum HttpStatus {
     INTERNAL_SERVER_ERROR = 500,
     SERVICE_UNAVAILABLE = 503,
 }
+
+export enum NotificationModule {
+    REVIEW = 'Review',
+    COMMENT = 'Comment',
+}
+
+export enum NotificationAction {
+    LIKE = 'Like',
+    COMMENT = 'Comment',
+}
+
+export enum SocketEvent {
+    USER_LIKE = 'USER_LIKE',
+    USER_COMMENT = 'USER_COMMENT',
+
+    USER_NOTIFICATION = 'USER_NOTIFICATION',
+}

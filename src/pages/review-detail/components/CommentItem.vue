@@ -10,9 +10,18 @@
                 bình luận lúc: {{ dayjs(comment?.createdAt).fmHHmmDDMMYYYY() }}
             </div>
 
-            <div class="manage-button-groups" v-if="isCommentAuthor">
-                <ElButton @click="updateComment">Chỉnh sửa</ElButton>
-                <ElButton @click="deleteComment(comment?._id)">Xóa</ElButton>
+            <div class="manage-button-groups">
+                <ElButton @click="updateComment" v-if="isCommentAuthor"
+                    >Chỉnh sửa</ElButton
+                >
+                <ElButton
+                    @click="deleteComment(comment?._id)"
+                    v-if="isCommentAuthor"
+                    >Xóa</ElButton
+                >
+                <ElButton @click="reportComment(comment?._id)"
+                    >Báo cáo</ElButton
+                >
             </div>
         </div>
         <div class="comment-section">
@@ -30,7 +39,7 @@
 
         <div class="react-section">
             {{ numberOfLikes }} lượt thích
-            <ElButton @click="reactToReview(comment?._id)">{{
+            <ElButton @click="reactToComment(comment?._id)">{{
                 isLike ? 'Bỏ thích' : 'Thích'
             }}</ElButton>
             <ElButton @click="showReplyBox">Trả lời</ElButton>
@@ -51,9 +60,10 @@ import {
     showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
-import { PageName } from '@/constants';
+import { NotificationModule, PageName } from '@/constants';
 import type { IComment, IStore } from '@/interfaces';
 import dayjs from '@/plugins/dayjs';
+import { SocketIO } from '@/plugins/socket.io';
 import { commentService } from '@/services/comment.api';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -87,11 +97,17 @@ const showReplyBox = () => {
     isShowReplyBox.value = !isShowReplyBox.value;
 };
 
-const reactToReview = async (id: string) => {
+const reactToComment = async (id: string) => {
     if (!showRequireLoginFunction()) return;
 
     await commentService.reactToComment(id);
     store.dispatch('comments/getCommentList');
+
+    SocketIO.emitUserLike(
+        props.comment.authorId,
+        props.comment._id,
+        NotificationModule.COMMENT
+    );
 };
 
 const updateComment = () => {
@@ -112,6 +128,11 @@ const deleteComment = async (id: string) => {
     } else {
         showErrorNotificationFunction('Xóa bình luận thất bại');
     }
+};
+
+const reportComment = (id: string) => {
+    store.dispatch('dialogs/setIsShowReportCommentDialog', true);
+    store.dispatch('dialogs/setToReportCommentId', id);
 };
 </script>
 

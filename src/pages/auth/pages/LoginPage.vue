@@ -22,8 +22,9 @@ import {
     showErrorNotificationFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
-import { PageName } from '@/constants';
-import type { IStore } from '@/interfaces';
+import { NotificationAction, NotificationModule, PageName } from '@/constants';
+import type { IComment, IStore } from '@/interfaces';
+import { SocketIO } from '@/plugins/socket.io';
 import { authService } from '@/services/auth.api';
 import { useField, useForm } from 'vee-validate';
 import { onMounted } from 'vue';
@@ -57,10 +58,35 @@ const onSubmit = handleSubmit(async (values) => {
         localStorageAuthService.setLoginUser(response.data.user);
         store.dispatch('auth/setLoginUser', response.data.user);
         showSuccessNotificationFunction('Đăng nhập thành công');
+        SocketIO.connect(response.data.accessToken);
         router.push({
             name: PageName.HOME_PAGE,
         });
         clearFormData();
+
+        SocketIO.onUserNotification(async (payload) => {
+            const { senderId, module, action, targetId, createdAt } = payload;
+            showSuccessNotificationFunction(
+                `${senderId.username} vừa ${
+                    action === NotificationAction.COMMENT
+                        ? 'bình luận'
+                        : 'thích'
+                } ${
+                    module === NotificationModule.REVIEW
+                        ? 'bài viết'
+                        : 'bình luận'
+                } của bạn.`,
+                'Thông báo',
+                () => {
+                    router.push({
+                        name: PageName.REVIEW_DETAIL_PAGE,
+                        params: {
+                            id: module === NotificationModule.REVIEW ? targetId._id : (targetId as IComment).reviewId
+                        }
+                    })
+                }
+            );
+        });
     } else {
         showErrorNotificationFunction(
             'Đăng nhập thất bại',
