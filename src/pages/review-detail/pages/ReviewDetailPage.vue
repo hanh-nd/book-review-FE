@@ -26,7 +26,7 @@
         <!-- Bình luận: Tổng số {{ commentListCount }} bình luân -->
 
         <div class="create-comment">
-            <CreateCommentBox :review-id="reviewId" />
+            <CreateCommentBox :review-id="reviewId" :author-id="reviewDetail?.author[0]?._id || ''" />
         </div>
         <div class="comment-list">
             <CommentList :comment-list-tree="commentList" />

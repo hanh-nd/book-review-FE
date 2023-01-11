@@ -46,6 +46,7 @@
             <CreateReplyBox
                 :review-id="comment.reviewId"
                 :parent-id="comment._id"
+                :author-id="comment.authorId"
                 v-show="isShowReplyBox"
             />
         </div>
@@ -100,14 +101,16 @@ const showReplyBox = () => {
 const reactToComment = async (id: string) => {
     if (!showRequireLoginFunction()) return;
 
+    if (!isLike) {
+        SocketIO.emitUserLike(
+            props.comment.authorId,
+            props.comment._id,
+            NotificationModule.COMMENT
+        );
+    }
+
     await commentService.reactToComment(id);
     store.dispatch('comments/getCommentList');
-
-    SocketIO.emitUserLike(
-        props.comment.authorId,
-        props.comment._id,
-        NotificationModule.COMMENT
-    );
 };
 
 const updateComment = () => {

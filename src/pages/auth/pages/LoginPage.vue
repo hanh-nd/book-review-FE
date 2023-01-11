@@ -26,6 +26,7 @@ import { NotificationAction, NotificationModule, PageName } from '@/constants';
 import type { IComment, IStore } from '@/interfaces';
 import { SocketIO } from '@/plugins/socket.io';
 import { authService } from '@/services/auth.api';
+import { notificationService } from '@/services/notification.api';
 import { useField, useForm } from 'vee-validate';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -64,8 +65,13 @@ const onSubmit = handleSubmit(async (values) => {
         });
         clearFormData();
 
+        await store.dispatch('notifications/setNotificationListQuery', {
+            receiverId: response.data.user._id,
+        });
+        store.dispatch('notifications/getNotificationList');
         SocketIO.onUserNotification(async (payload) => {
-            const { senderId, module, action, targetId, createdAt } = payload;
+            const { _id, senderId, module, action, targetId, createdAt } =
+                payload;
             showSuccessNotificationFunction(
                 `${senderId.username} vừa ${
                     action === NotificationAction.COMMENT
@@ -78,12 +84,18 @@ const onSubmit = handleSubmit(async (values) => {
                 } của bạn.`,
                 'Thông báo',
                 () => {
+                    notificationService.updateNotification(_id, {
+                        isRead: true,
+                    });
                     router.push({
                         name: PageName.REVIEW_DETAIL_PAGE,
                         params: {
-                            id: module === NotificationModule.REVIEW ? targetId._id : (targetId as IComment).reviewId
-                        }
-                    })
+                            id:
+                                module === NotificationModule.REVIEW
+                                    ? targetId._id
+                                    : (targetId as IComment).reviewId,
+                        },
+                    });
                 }
             );
         });

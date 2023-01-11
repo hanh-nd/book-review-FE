@@ -1,9 +1,10 @@
 import type { AxiosResponse } from 'axios';
-import type { HttpStatus } from './constants';
+import type { HttpStatus, NotificationAction, NotificationModule } from './constants';
 import type { IAuthState } from './plugins/vuex/modules/auth';
 import type { IBookState } from './plugins/vuex/modules/books';
 import type { ICommentState } from './plugins/vuex/modules/comments';
 import type { IDialogState } from './plugins/vuex/modules/dialogs';
+import type { INotificationState } from './plugins/vuex/modules/notifications';
 import type { IReviewState } from './plugins/vuex/modules/reviews';
 import type { IUserState } from './plugins/vuex/modules/users';
 
@@ -34,6 +35,7 @@ export interface IStore {
     users: IUserState;
     dialogs: IDialogState;
     comments: ICommentState;
+    notifications: INotificationState;
 }
 
 export interface IBook {
@@ -154,4 +156,28 @@ export interface IUpdateCommentBody {
 
 export interface ICommentListTree extends IComment {
     children: ICommentListTree[];
+}
+
+export interface INotification {
+    _id: string;
+    targetId: string;
+    module: NotificationModule;
+    action: NotificationAction;
+    senderId: string;
+    receiverId: string;
+    isRead: boolean;
+    sender: IUser[];
+    receiver: IUser[];
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IGetNotificationListQuery extends IGetListQuery {
+    receiverId: string;
+    isRead?: boolean;
+}
+
+export interface IUpdateNotificationBody {
+    isRead: boolean;
 }

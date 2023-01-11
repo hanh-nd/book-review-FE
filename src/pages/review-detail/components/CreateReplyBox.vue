@@ -22,7 +22,9 @@ import {
     showRequireLoginFunction,
     showSuccessNotificationFunction,
 } from '@/common/helpers';
+import { NotificationModule } from '@/constants';
 import type { IStore } from '@/interfaces';
+import { SocketIO } from '@/plugins/socket.io';
 import { commentService } from '@/services/comment.api';
 import { useField, useForm } from 'vee-validate';
 import { useStore } from 'vuex';
@@ -30,6 +32,7 @@ import { useStore } from 'vuex';
 const props = defineProps<{
     reviewId: string;
     parentId: string;
+    authorId: string;
 }>();
 
 const store = useStore<IStore>();
@@ -60,6 +63,12 @@ const onSubmit = handleSubmit(async (values) => {
         showSuccessNotificationFunction('Comment created');
         clearFormData();
         store.dispatch('comments/getCommentList');
+
+        SocketIO.emitUserComment(
+            props.authorId,
+            props.parentId,
+            NotificationModule.COMMENT
+        );
     } else {
         showErrorNotificationFunction('An error occurred ');
     }

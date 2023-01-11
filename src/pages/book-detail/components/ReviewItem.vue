@@ -70,7 +70,9 @@ const isShowUpdateInput = ref(false);
 
 const isLike = computed(() => isUserLiked(props.review.likeIds));
 const numberOfLikes = computed(() => props.review.likeIds.length);
-const isReviewAuthor = computed(() => isAuthor(props.review.author?.[0]._id));
+const isReviewAuthor = computed(() =>
+    isAuthor(props.review.author?.[0]?._id || '')
+);
 
 const viewAuthorProfile = (id: string) => {
     router.push({
@@ -93,10 +95,16 @@ const navigateToDetailPage = (id: string) => {
 const reactToReview = async (id: string) => {
     if (!showRequireLoginFunction()) return;
 
+    if (!isLike) {
+        SocketIO.emitUserLike(
+            props.review.author[0]._id,
+            props.review._id,
+            NotificationModule.REVIEW
+        );
+    }
+
     await reviewService.reactToReview(id);
     store.dispatch('reviews/getReviewList');
-
-    SocketIO.emitUserLike(props.review.author[0]._id, props.review._id, NotificationModule.REVIEW)
 };
 
 const updateReview = () => {

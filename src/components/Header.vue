@@ -6,6 +6,7 @@
                 <span @click="navigateProfilePage" class="username">
                     {{ loginUser?.username }}
                 </span>
+                <NotificationBar />
                 <ElButton @click="onLogout">Đăng xuất</ElButton>
             </div>
             <div v-else>
@@ -24,6 +25,7 @@ import { ElButton } from 'element-plus';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import NotificationBar from './NotificationBar.vue';
 
 const router = useRouter();
 const store = useStore<IStore>();
