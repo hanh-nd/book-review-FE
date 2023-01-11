@@ -96,10 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
     if (response?.success) {
         showSuccessNotificationFunction('Book updated');
         router.push({
-            name: PageName.BOOK_DETAIL_PAGE,
-            params: {
-                id: bookDetail.value?._id,
-            },
+            name: PageName.ADMIN_BOOK_LIST_PAGE,
         });
     } else {
         showErrorNotificationFunction('An error occurred ');

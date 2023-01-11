@@ -16,9 +16,16 @@
                 >
             </div>
 
-            <div class="manage-button-groups" v-if="isReviewAuthor">
-                <ElButton @click="updateReview">Chỉnh sửa</ElButton>
-                <ElButton @click="deleteReview(review?._id)">Xóa</ElButton>
+            <div class="manage-button-groups">
+                <ElButton @click="updateReview" v-if="isReviewAuthor"
+                    >Chỉnh sửa</ElButton
+                >
+                <ElButton
+                    @click="deleteReview(review?._id)"
+                    v-if="isReviewAuthor"
+                    >Xóa</ElButton
+                >
+                <ElButton @click="reportReview(review?._id)">Báo cáo</ElButton>
             </div>
         </div>
         <div class="review-section">
@@ -125,6 +132,11 @@ const deleteReview = async (id: string) => {
     } else {
         showErrorNotificationFunction('Xóa đánh giá thất bại');
     }
+};
+
+const reportReview = (id: string) => {
+    store.dispatch('dialogs/setIsShowReportReviewDialog', true);
+    store.dispatch('dialogs/setToReportReviewId', id);
 };
 </script>
 

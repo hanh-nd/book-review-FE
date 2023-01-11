@@ -1,10 +1,11 @@
 import type { AxiosResponse } from 'axios';
-import type { HttpStatus, NotificationAction, NotificationModule } from './constants';
+import type { HttpStatus, NotificationAction, NotificationModule, ReportType } from './constants';
 import type { IAuthState } from './plugins/vuex/modules/auth';
 import type { IBookState } from './plugins/vuex/modules/books';
 import type { ICommentState } from './plugins/vuex/modules/comments';
 import type { IDialogState } from './plugins/vuex/modules/dialogs';
 import type { INotificationState } from './plugins/vuex/modules/notifications';
+import type { IReportState } from './plugins/vuex/modules/reports';
 import type { IReviewState } from './plugins/vuex/modules/reviews';
 import type { IUserState } from './plugins/vuex/modules/users';
 
@@ -36,6 +37,7 @@ export interface IStore {
     dialogs: IDialogState;
     comments: ICommentState;
     notifications: INotificationState;
+    reports: IReportState;
 }
 
 export interface IBook {
@@ -128,7 +130,32 @@ export interface IUpdateReviewBody {
     content: string;
 }
 
+export interface IReport {
+    _id: string;
+    targetId: string;
+    target: IReview[] | IComment[];
+    type: ReportType;
+    reporterId: string;
+    reporter: IUser[];
+    description: string;
+    resolved: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface IGetReportListQuery extends IGetListQuery {
+    resolved?: boolean;
+}
+
+export interface IUpdateReportBody {
+    resolved: boolean;
+}
+
 export interface IReportReviewBody {
+    description: string;
+}
+
+export interface IReportCommentBody {
     description: string;
 }
 

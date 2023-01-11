@@ -1,11 +1,8 @@
 import type {
-    IBodyResponse,
-    ICommonGetListResponse,
+    IBodyResponse, IComment,
+    ICommentListTree, ICommonGetListResponse,
     ICreateCommentBody,
-    IGetCommentListQuery,
-    IComment,
-    ICommentListTree,
-    IUpdateCommentBody,
+    IGetCommentListQuery, IReportCommentBody, IUpdateCommentBody
 } from '@/interfaces';
 import axiosInstance from '@/plugins/axios';
 import { ApiService } from '@/plugins/axios/api';
@@ -36,6 +33,17 @@ class CommentService extends ApiService {
 
     deleteComment(commentId: string): Promise<IBodyResponse<any>> {
         return this.client.delete(`${this.baseUrl}/comments/${commentId}`);
+    }
+
+
+    reportComment(
+        commentId: string,
+        body: IReportCommentBody,
+    ): Promise<IBodyResponse<any>> {
+        return this.client.post(
+            `${this.baseUrl}/comments/${commentId}/report`,
+            body
+        );
     }
 }
 

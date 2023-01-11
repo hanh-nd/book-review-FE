@@ -1,12 +1,16 @@
 export interface IDialogState {
     isShowCreateReviewDialog: boolean;
     isShowReportCommentDialog: boolean;
+    isShowReportReviewDialog: boolean;
     toReportCommentId: string;
+    toReportReviewId: string;
 }
 const state = (): IDialogState => ({
     isShowCreateReviewDialog: false,
     isShowReportCommentDialog: false,
+    isShowReportReviewDialog: false,
     toReportCommentId: '',
+    toReportReviewId: '',
 });
 
 const getters = {
@@ -14,7 +18,10 @@ const getters = {
         state.isShowCreateReviewDialog,
     isShowReportCommentDialog: (state: IDialogState) =>
         state.isShowReportCommentDialog,
+    isShowReportReviewDialog: (state: IDialogState) =>
+        state.isShowReportReviewDialog,
     toReportCommentId: (state: IDialogState) => state.toReportCommentId,
+    toReportReviewId: (state: IDialogState) => state.toReportReviewId,
 };
 
 const actions = {
@@ -36,6 +43,18 @@ const actions = {
     ) {
         commit('SET_TO_REPORT_COMMENT_ID', toReportCommentId);
     },
+    setIsShowReportReviewDialog(
+        { commit, state }: { commit: any; state: IDialogState },
+        isShowReportReviewDialog: boolean
+    ) {
+        commit('SET_IS_SHOW_REPORT_REVIEW_DIALOG', isShowReportReviewDialog);
+    },
+    setToReportReviewId(
+        { commit, state }: { commit: any; state: IDialogState },
+        toReportReviewId: boolean
+    ) {
+        commit('SET_TO_REPORT_REVIEW_ID', toReportReviewId);
+    },
 };
 
 const mutations = {
@@ -51,11 +70,17 @@ const mutations = {
     ) {
         state.isShowReportCommentDialog = isShowReportCommentDialog;
     },
-    SET_TO_REPORT_COMMENT_ID(
-        state: IDialogState,
-        toReportCommentId: string
-    ) {
+    SET_TO_REPORT_COMMENT_ID(state: IDialogState, toReportCommentId: string) {
         state.toReportCommentId = toReportCommentId;
+    },
+    SET_IS_SHOW_REPORT_REVIEW_DIALOG(
+        state: IDialogState,
+        isShowReportReviewDialog: boolean
+    ) {
+        state.isShowReportReviewDialog = isShowReportReviewDialog;
+    },
+    SET_TO_REPORT_REVIEW_ID(state: IDialogState, toReportReviewId: string) {
+        state.toReportReviewId = toReportReviewId;
     },
 };
 

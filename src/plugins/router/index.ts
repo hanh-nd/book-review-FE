@@ -32,22 +32,34 @@ const router = createRouter({
             component: () => import('@/pages/profile/pages/ProfilePage.vue'),
         },
         {
-            path: '/books/create',
-            name: PageName.CREATE_BOOK_PAGE,
-            component: () =>
-                import('@/pages/book-manage/pages/CreateBookPage.vue'),
-        },
-        {
-            path: '/books/:id/update',
-            name: PageName.UPDATE_BOOK_PAGE,
-            component: () =>
-                import('@/pages/book-manage/pages/UpdateBookPage.vue'),
-        },
-        {
             path: '/reviews/:id',
             name: PageName.REVIEW_DETAIL_PAGE,
             component: () =>
                 import('@/pages/review-detail/pages/ReviewDetailPage.vue'),
+        },
+        {
+            path: '/admin/books',
+            name: PageName.ADMIN_BOOK_LIST_PAGE,
+            component: () =>
+                import('@/pages/admin/pages/books/AdminBookListPage.vue'),
+        },
+        {
+            path: '/admin/books/create',
+            name: PageName.CREATE_BOOK_PAGE,
+            component: () =>
+                import('@/pages/admin/pages/books/CreateBookPage.vue'),
+        },
+        {
+            path: '/admin/books/:id/update',
+            name: PageName.UPDATE_BOOK_PAGE,
+            component: () =>
+                import('@/pages/admin/pages/books/UpdateBookPage.vue'),
+        },
+        {
+            path: '/admin/reports',
+            name: PageName.ADMIN_REPORT_LIST_PAGE,
+            component: () =>
+                import('@/pages/admin/pages/reports/ReportListPage.vue'),
         },
     ],
 });

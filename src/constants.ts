@@ -7,6 +7,8 @@ export const PageName = {
     CREATE_BOOK_PAGE: 'CREATE_BOOK_PAGE',
     UPDATE_BOOK_PAGE: 'UPDATE_BOOK_PAGE',
     REVIEW_DETAIL_PAGE: 'REVIEW_DETAIL_PAGE',
+    ADMIN_BOOK_LIST_PAGE: 'ADMIN_BOOK_LIST_PAGE',
+    ADMIN_REPORT_LIST_PAGE: 'ADMIN_REPORT_LIST_PAGE',
 };
 
 export enum HttpStatus {
@@ -26,6 +28,11 @@ export enum HttpStatus {
     ITEM_INVALID = 446,
     INTERNAL_SERVER_ERROR = 500,
     SERVICE_UNAVAILABLE = 503,
+}
+
+export enum ReportType {
+    REVIEW = 'Review',
+    COMMENT = 'Comment',
 }
 
 export enum NotificationModule {

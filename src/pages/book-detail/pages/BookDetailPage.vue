@@ -27,7 +27,6 @@
                 >Xóa khỏi tủ sách</ElButton
             >
 
-            <ElButton @click="navigateToUpdateBookPage">Cập nhật</ElButton>
         </div>
         <div class="book-review">
             Review: Tổng số {{ reviewListCount }} review(s)
@@ -66,17 +65,6 @@ const bookId = computed(() => route.params.id as string);
 const bookDetail = computed<IBook>(() => store.state.books.selectedBook!);
 const reviewList = computed(() => store.state.reviews.reviewList);
 const reviewListCount = computed(() => store.state.reviews.reviewListCount);
-
-const navigateToUpdateBookPage = () => {
-    if (!showRequireLoginFunction()) return;
-
-    router.push({
-        name: PageName.UPDATE_BOOK_PAGE,
-        params: {
-            id: bookDetail.value?._id,
-        },
-    });
-};
 
 const addToBookShelf = async () => {
     if (!showRequireLoginFunction()) return;

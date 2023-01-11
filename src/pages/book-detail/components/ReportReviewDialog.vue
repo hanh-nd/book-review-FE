@@ -1,5 +1,5 @@
 <template>
-    <ElDialog :model-value="isShowDialog" title="Báo cáo bình luận">
+    <ElDialog :model-value="isShowDialog" title="Báo cáo bài viết">
         <ElInput
             name="description"
             v-model="description"
@@ -18,7 +18,6 @@ import {
     showSuccessNotificationFunction,
 } from '@/common/helpers';
 import type { IStore } from '@/interfaces';
-import { commentService } from '@/services/comment.api';
 import { reviewService } from '@/services/review.api';
 import { ElDialog } from 'element-plus';
 import { useField, useForm } from 'vee-validate';
@@ -27,9 +26,9 @@ import { useStore } from 'vuex';
 
 const store = useStore<IStore>();
 const isShowDialog = computed(
-    () => store.state.dialogs.isShowReportCommentDialog
+    () => store.state.dialogs.isShowReportReviewDialog
 );
-const toReportCommentId = computed(() => store.state.dialogs.toReportCommentId);
+const toReportReviewId = computed(() => store.state.dialogs.toReportReviewId);
 const initialValues = {
     description: '',
 };
@@ -49,14 +48,14 @@ const clearFormData = () => {
 const onSubmit = handleSubmit(async (values) => {
     if (!showRequireLoginFunction()) return;
 
-    const response = await commentService.reportComment(
-        toReportCommentId.value,
+    const response = await reviewService.reportReview(
+        toReportReviewId.value,
         values
     );
     if (response?.success) {
         showSuccessNotificationFunction('Reported');
         clearFormData();
-        store.dispatch('dialogs/setIsShowReportCommentDialog', false);
+        store.dispatch('dialogs/setIsShowReportReviewDialog', false);
     } else {
         showErrorNotificationFunction('An error occurred ');
     }
