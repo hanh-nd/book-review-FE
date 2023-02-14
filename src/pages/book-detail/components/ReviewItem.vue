@@ -102,7 +102,7 @@ const navigateToDetailPage = (id: string) => {
 const reactToReview = async (id: string) => {
     if (!showRequireLoginFunction()) return;
 
-    if (!isLike) {
+    if (!isLike.value) {
         SocketIO.emitUserLike(
             props.review.author[0]._id,
             props.review._id,

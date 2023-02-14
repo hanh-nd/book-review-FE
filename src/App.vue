@@ -32,6 +32,8 @@ if (accessToken) {
         });
     SocketIO.connect(accessToken);
     SocketIO.onUserNotification(async (payload) => {
+        store.dispatch('notifications/getNotificationList');
+
         const { _id, senderId, module, action, targetId, createdAt } = payload;
         showSuccessNotificationFunction(
             `${senderId.username} vừa ${

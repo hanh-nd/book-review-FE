@@ -101,7 +101,7 @@ const showReplyBox = () => {
 const reactToComment = async (id: string) => {
     if (!showRequireLoginFunction()) return;
 
-    if (!isLike) {
+    if (!isLike.value) {
         SocketIO.emitUserLike(
             props.comment.authorId,
             props.comment._id,

@@ -70,6 +70,8 @@ const onSubmit = handleSubmit(async (values) => {
         });
         store.dispatch('notifications/getNotificationList');
         SocketIO.onUserNotification(async (payload) => {
+            store.dispatch('notifications/getNotificationList');
+
             const { _id, senderId, module, action, targetId, createdAt } =
                 payload;
             showSuccessNotificationFunction(

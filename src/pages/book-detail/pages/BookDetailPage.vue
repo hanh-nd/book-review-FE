@@ -15,7 +15,12 @@
                 <div class="content">
                     Năm xuất bản: {{ bookDetail?.publicationYear }}
                 </div>
-                <div class="content">Nội dung:</div>
+                <div class="content">
+                    Nội dung:
+                    <ElButton @click="playSound(bookDetail?.describe)"
+                        >Phát</ElButton
+                    >
+                </div>
                 {{ bookDetail?.describe }}
             </div>
         </div>
@@ -26,7 +31,6 @@
             <ElButton @click="removeToBookShelf" v-if="isBookInBookShelf"
                 >Xóa khỏi tủ sách</ElButton
             >
-
         </div>
         <div class="book-review">
             Review: Tổng số {{ reviewListCount }} review(s)
@@ -56,6 +60,7 @@ import { userService } from '@/services/user.api';
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { ttsService } from '@/services/tts.api';
 
 const route = useRoute();
 const router = useRouter();
@@ -92,6 +97,13 @@ const removeToBookShelf = async () => {
     } else {
         showErrorNotificationFunction('An error occurred');
     }
+};
+
+const playSound = async (text: string | undefined) => {
+    if (!text) return;
+    const response = await ttsService.getSpeech(text);
+
+    console.log(response);
 };
 
 const isBookInBookShelf = computed(() => {
