@@ -58,6 +58,33 @@ if (accessToken) {
             }
         );
     });
+
+    SocketIO.onUserChat(async (payload) => {
+        store.dispatch('chats/getChatList');
+        router.push({
+            name: PageName.CHAT_DETAIL_PAGE,
+            params: {
+                id: payload._id,
+            },
+        });
+    });
+
+    SocketIO.onUserMessage(async (payload) => {
+        store.dispatch('chats/getMessageList', payload.chatId);
+
+        // showSuccessNotificationFunction(
+        //     `${payload.senders?.[0]?.username} vừa nhắn tin cho bạn`,
+        //     'Thông báo',
+        //     () => {
+        //         router.push({
+        //             name: PageName.CHAT_DETAIL_PAGE,
+        //             params: {
+        //                 id: payload.chatId,
+        //             },
+        //         });
+        //     }
+        // );
+    });
 }
 </script>
 

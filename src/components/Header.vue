@@ -6,6 +6,7 @@
                 <span @click="navigateProfilePage" class="username">
                     {{ loginUser?.username }}
                 </span>
+                <ElButton @click="navigateChatPage">Nhắn tin</ElButton>
                 <NotificationBar />
                 <ElButton @click="onLogout">Đăng xuất</ElButton>
             </div>
@@ -45,6 +46,12 @@ const navigateLoginPage = () => {
 const navigateRegisterPage = () => {
     router.push({
         name: PageName.REGISTER_PAGE,
+    });
+};
+
+const navigateChatPage = () => {
+    router.push({
+        name: PageName.CHAT_LIST_PAGE,
     });
 };
 

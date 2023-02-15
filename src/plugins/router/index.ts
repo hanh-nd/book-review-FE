@@ -61,6 +61,17 @@ const router = createRouter({
             component: () =>
                 import('@/pages/admin/pages/reports/ReportListPage.vue'),
         },
+        {
+            path: '/chat',
+            name: PageName.CHAT_LIST_PAGE,
+            component: () => import('@/pages/chat/pages/ChatPage.vue'),
+        },
+        {
+            path: '/chat/:id',
+            name: PageName.CHAT_DETAIL_PAGE,
+            component: () =>
+                import('@/pages/chat-detail/pages/ChatDetailPage.vue'),
+        },
     ],
 });
 

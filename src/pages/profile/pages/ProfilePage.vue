@@ -7,6 +7,9 @@
                 Ngày tham gia: {{ dayjs(userDetail?.createdAt).fmDDMMYYYY() }}
             </div>
         </div>
+        <div class="action">
+            <ElButton @click="openChat(userDetail?._id)">Nhắn tin</ElButton>
+        </div>
     </div>
 
     <div class="book-shelf">
@@ -21,8 +24,9 @@
 
 <script setup lang="ts">
 import BookList from '@/components/BookList.vue';
-import type { IStore, IUser } from '@/interfaces';
+import type { IStore } from '@/interfaces';
 import dayjs from '@/plugins/dayjs';
+import { SocketIO } from '@/plugins/socket.io';
 import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
@@ -41,6 +45,11 @@ watch(
         immediate: true,
     }
 );
+
+const openChat = (receiverId: string | undefined) => {
+    if (!receiverId) return;
+    SocketIO.emitUserChat(receiverId, Date.now().toString());
+};
 </script>
 
 <style lang="scss" scoped></style>

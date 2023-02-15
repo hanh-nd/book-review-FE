@@ -1,7 +1,13 @@
 import type { AxiosResponse } from 'axios';
-import type { HttpStatus, NotificationAction, NotificationModule, ReportType } from './constants';
+import type {
+    HttpStatus,
+    NotificationAction,
+    NotificationModule,
+    ReportType,
+} from './constants';
 import type { IAuthState } from './plugins/vuex/modules/auth';
 import type { IBookState } from './plugins/vuex/modules/books';
+import type { IChatState } from './plugins/vuex/modules/chats';
 import type { ICommentState } from './plugins/vuex/modules/comments';
 import type { IDialogState } from './plugins/vuex/modules/dialogs';
 import type { INotificationState } from './plugins/vuex/modules/notifications';
@@ -38,6 +44,7 @@ export interface IStore {
     comments: ICommentState;
     notifications: INotificationState;
     reports: IReportState;
+    chats: IChatState;
 }
 
 export interface IBook {
@@ -159,7 +166,6 @@ export interface IReportCommentBody {
     description: string;
 }
 
-
 export interface IUpdateUserBody {
     password: string;
 }
@@ -208,3 +214,33 @@ export interface IGetNotificationListQuery extends IGetListQuery {
 export interface IUpdateNotificationBody {
     isRead: boolean;
 }
+
+export interface IChat {
+    _id: string;
+    memberIds: string[];
+    members: IUser[];
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IMessage {
+    _id: string;
+    senderId: string;
+    receiverId: string;
+    chatId: string;
+    sender: IUser[];
+    receiver: IUser[];
+    chat: IUser[];
+    content: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
+}
+
+export interface IGetChatListQuery extends IGetListQuery {
+    receiverId: string;
+}
+
+export interface IGetMessageListQuery extends IGetListQuery {}

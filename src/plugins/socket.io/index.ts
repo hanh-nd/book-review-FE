@@ -1,6 +1,10 @@
 import { SocketEvent, type NotificationModule } from '@/constants';
 import { io, type Socket } from 'socket.io-client';
-import type { IUserNotificationPayload } from './interfaces';
+import type {
+    IUserChatPayload,
+    IUserMessagePayload,
+    IUserNotificationPayload,
+} from './interfaces';
 
 export class SocketIO {
     static socket: Socket;
@@ -18,6 +22,18 @@ export class SocketIO {
         callback: (payload: IUserNotificationPayload) => void
     ) {
         SocketIO.socket.on(SocketEvent.USER_NOTIFICATION, (payload) => {
+            callback(payload);
+        });
+    }
+
+    static onUserChat(callback: (payload: IUserChatPayload) => void) {
+        SocketIO.socket.on(SocketEvent.USER_CHAT, (payload) => {
+            callback(payload);
+        });
+    }
+
+    static onUserMessage(callback: (payload: IUserMessagePayload) => void) {
+        SocketIO.socket.on(SocketEvent.USER_MESSAGE, (payload) => {
             callback(payload);
         });
     }
@@ -43,6 +59,20 @@ export class SocketIO {
             authorId,
             targetId,
             module,
+        });
+    }
+
+    static emitUserChat(receiverId: string, name: string) {
+        SocketIO.socket.emit(SocketEvent.USER_CHAT, {
+            receiverId,
+            name,
+        });
+    }
+
+    static emitUserMessage(chatId: string, content: string) {
+        SocketIO.socket.emit(SocketEvent.USER_MESSAGE, {
+            chatId,
+            content,
         });
     }
 }
